@@ -16,7 +16,7 @@ const CategoryItem = ({ category, isActive, onPress, }: CategoryItemProps) => {
 
     React.useEffect(() => {
       Animated.timing(heightAnim, {
-        toValue: isActive ? 125 :125,
+        toValue: isActive ? 125 : 60,
         duration: 250,
         useNativeDriver: false, 
       }).start();
@@ -43,7 +43,7 @@ const CategoryItem = ({ category, isActive, onPress, }: CategoryItemProps) => {
                                 resizeMode="cover"
                             />
                         </View>
-                       
+                        {isActive &&
                             <Animated.View style={[styles.textContainer,]}>
                                 <Text
                                     variant="caption"
@@ -54,7 +54,7 @@ const CategoryItem = ({ category, isActive, onPress, }: CategoryItemProps) => {
                                     {category.name}
                                 </Text>
                             </Animated.View>
-                        
+                        }
                     </Animated.View>
                 </View>
             </TouchableOpacity>

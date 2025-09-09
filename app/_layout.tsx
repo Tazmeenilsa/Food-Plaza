@@ -1,6 +1,6 @@
+import FontLoader from '@/components/FontLoader';
 import { Stack } from "expo-router";
 import { ThemeProvider } from '../theme/ThemeContext';
-import FontLoader from '@/components/FontLoader';
 
 export default function RootLayout() {
   return (
@@ -11,6 +11,7 @@ export default function RootLayout() {
             headerShown: false
           }}>
           <Stack.Screen name="(tabs)"  />
+          <Stack.Screen name='checkout'/>
         </Stack>
       </FontLoader>
     </ThemeProvider>
