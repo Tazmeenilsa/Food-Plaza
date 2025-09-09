@@ -50,7 +50,7 @@ const CheckoutScreen = () => {
 
   const handlePlaceOrder = () => {
     setIsLoading(true);
-    // Simulate API call
+
     setTimeout(() => {
       setIsLoading(false);
       // Navigate to order confirmation
@@ -60,14 +60,12 @@ const CheckoutScreen = () => {
   };
 
   const handleAddNewCard = () => {
-    // Navigate to add card screen
-    // navigation.navigate('AddCard');
+   
     alert('Add new card flow would open here');
   };
 
   const handleEditAddress = () => {
-    // Navigate to address screen
-    // navigation.navigate('EditAddress');
+ 
     alert('Edit address flow would open here');
   };
 
