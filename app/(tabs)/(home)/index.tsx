@@ -15,7 +15,7 @@ export interface Category {
 
 export default function Index() {
   const [categories, setCategories] = useState<Category[]>([]);
-  const [activeCategory, setActiveCategory] = useState<number | null>(1);
+  const [activeCategory, setActiveCategory] = useState<number | null>(0);
   const itemSize = 60; // Size for the circular category items
 
   useEffect(() => {
@@ -38,6 +38,7 @@ export default function Index() {
       size={itemSize}
     />
   )
+  const filteredFoods = ApiData.foods.filter((food) => food.categoryId === activeCategory)
   return (
     <RootLayout homeheader={true} >
       <SearchBar
@@ -51,20 +52,18 @@ export default function Index() {
           renderItem={renderCategoryItem}
           keyExtractor={(item) => item.id.toString()}
           horizontal
-          nestedScrollEnabled={true}
-
+          showsHorizontalScrollIndicator={false}
         />
 
 
       </View>
 
       <View style={styles.list}>
-        <Text variant='h3' fontWeight='medium' style={styles.sectionTitle}>Popular Now ✨</Text>
+        <Text variant='h3' fontWeight='medium' style={styles.sectionTitle}>{activeCategory ? categories.find((category) => category.id === activeCategory)?.name : 'Popular Now'} ✨</Text>
         <FlatList
-          data={ApiData.foods}
+          data={activeCategory ? filteredFoods : ApiData.foods}
           renderItem={renderFoodItem}
           keyExtractor={(item) => item.id.toString()}
-          nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
         />
       </View>

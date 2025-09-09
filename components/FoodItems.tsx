@@ -1,23 +1,34 @@
+import { addToCart, decrementQuantity } from '@/app/redux/Slices/CartSlice';
+import { RootState } from '@/app/redux/store';
 import { colors } from '@/theme/colors';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 import Text from './Text';
+
 
 export interface FoodItemProps {
     id: number;
     name: string;
     price: number;
     rating: number;
+    
     image: string;
     description: string;
 }
 
-const FoodItemCard: React.FC<FoodItemProps> = ({ name, price, image, description }) => {
+const FoodItemCard: React.FC<FoodItemProps> = ({ id, name, price, image, description }) => {
     const [quantity, setQuantity] = useState(0);
-
-    const handleAdd = () => setQuantity(prev => prev + 1);
-    const handleRemove = () => setQuantity(prev => Math.max(0, prev - 1));
+    const cartData = useSelector((state: RootState) => state.cart.cartItems)
+    console.log({ cartData })
+    const dispatch = useDispatch()
+    const handleAdd = () => {
+        dispatch(addToCart({ id: id.toString(), name, price, image, description }))
+    };
+    const handleRemove = () => {
+        dispatch(decrementQuantity({ id: id.toString() }))
+    };
 
     return (
         <TouchableOpacity style={styles.foodCard} activeOpacity={0.8}>
@@ -31,19 +42,21 @@ const FoodItemCard: React.FC<FoodItemProps> = ({ name, price, image, description
                     </Text>
                     <View style={styles.foodFooter}>
                         <Text style={styles.foodPrice}>${price.toFixed(2)}</Text>
-                        {quantity > 0 ? (
+                        {(cartData.find((item) => item.id === id.toString())?.quantity || 0) > 0 ? (
                             <View style={styles.quantityContainer}>
                                 <TouchableOpacity onPress={handleRemove} style={styles.quantityButton}>
                                     <MaterialIcons name="remove" size={20} color={colors.primary} />
                                 </TouchableOpacity>
-                                <Text variant='caption' fontWeight='medium' style={styles.quantityText}>{quantity}</Text>
+                                <Text variant='caption' fontWeight='medium' style={styles.quantityText}>
+                                    {cartData.find((item) => item.id === id.toString())?.quantity || 0}
+                                </Text>
                                 <TouchableOpacity onPress={handleAdd} style={styles.quantityButton}>
                                     <AntDesign name="plus" size={20} color={colors.primary} />
                                 </TouchableOpacity>
                             </View>
                         ) : (
                             <TouchableOpacity onPress={handleAdd} style={styles.addButton}>
-                                <Text variant='button'  fontWeight='normal'>Add +</Text>
+                                <Text variant='button' fontWeight='normal'>Add +</Text>
                             </TouchableOpacity>
                         )}
                     </View>
@@ -91,7 +104,7 @@ const styles = StyleSheet.create({
     description: {
         marginBottom: 8,
         lineHeight: 18,
-        color:colors.gray600
+        color: colors.gray600
     },
     foodFooter: {
         flexDirection: 'row',
@@ -117,9 +130,9 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         paddingVertical: 8,
 
-        paddingHorizontal:10,
-        width:100,
-        justifyContent:'space-between'
+        paddingHorizontal: 10,
+        width: 100,
+        justifyContent: 'space-between'
     },
     quantityButton: {
         width: 25,
@@ -131,7 +144,7 @@ const styles = StyleSheet.create({
     },
     quantityText: {
         marginHorizontal: 8,
-        
+
         color: colors.gray800,
     },
 });
