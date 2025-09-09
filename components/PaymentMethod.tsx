@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
         borderBottomColor: colors.gray100,
     },
     selectedOption: {
-        backgroundColor: `${colors.primary}10`, // 10% opacity
+        backgroundColor: `${colors.primary}15`, // 10% opacity
         marginHorizontal: -16,
         paddingHorizontal: 16,
         borderBottomWidth: 0,

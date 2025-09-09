@@ -3,10 +3,11 @@ import OrderBill from '@/components/OrderBill';
 import OrderSummary from '@/components/OrderSummary';
 import PaymentMethod from '@/components/PaymentMethod';
 import RootLayout from '@/components/RootLayout';
+import Text from '@/components/Text';
 import { colors } from '@/theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 
 // Mock data - replace with your actual data
 const mockCartItems = [
@@ -37,7 +38,7 @@ const CheckoutScreen = () => {
   const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const total = subtotal + deliveryFee - discount;
 
- 
+
 
   const handleApplyPromo = (code: string) => {
     // Simple promo code logic 
@@ -60,41 +61,41 @@ const CheckoutScreen = () => {
   };
 
   const handleAddNewCard = () => {
-   
+
     alert('Add new card flow would open here');
   };
 
   const handleEditAddress = () => {
- 
+
     alert('Edit address flow would open here');
   };
 
   return (
     <RootLayout commonHeader={true} title="Checkout" iconName="shoppingcart">
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <OrderSummary 
-          items={cartItems} 
+        <OrderSummary
+          items={cartItems}
         />
-        
-        <DeliveryInfo 
+
+        <DeliveryInfo
           address="123 Food Street, Cuisine City, FC 12345, United States"
           onEditAddress={handleEditAddress}
         />
-        
-        <PaymentMethod 
+
+        <PaymentMethod
           selectedPayment={selectedPayment}
           onSelectPayment={setSelectedPayment}
           onAddNewCard={handleAddNewCard}
         />
-        
-        <OrderBill 
+
+        <OrderBill
           subtotal={subtotal}
           deliveryFee={deliveryFee}
           discount={discount}
           onApplyPromo={handleApplyPromo}
         />
-        
-        <TouchableOpacity 
+
+        <TouchableOpacity
           style={[styles.placeOrderButton, isLoading && styles.disabledButton]}
           onPress={handlePlaceOrder}
           disabled={isLoading}
@@ -102,7 +103,7 @@ const CheckoutScreen = () => {
           {isLoading ? (
             <ActivityIndicator color="#fff" />
           ) : (
-            <Text style={styles.placeOrderText}>
+            <Text variant='caption' fontWeight='medium' style={styles.placeOrderText}>
               Place Order • ${total.toFixed(2)}
             </Text>
           )}
@@ -135,8 +136,7 @@ const styles = StyleSheet.create({
   },
   placeOrderText: {
     color: colors.white,
-    fontSize: 16,
-    fontWeight: 'bold',
+
   },
 });
 

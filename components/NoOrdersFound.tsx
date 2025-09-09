@@ -1,21 +1,19 @@
 import { colors } from '@/theme/colors'
-import { AntDesign } from '@expo/vector-icons'
+import { MaterialIcons } from '@expo/vector-icons'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import Text from './Text'
 
-const NoOrdersFound = () => {
+const NoOrdersFound = ({ status }: { status: string }) => {
     return (
         <View style={styles.container}>
             <View style={styles.iconContainer}>
-                <AntDesign name="shoppingcart" size={80} color={colors.primary} />
+                <MaterialIcons name="receipt" size={48} color={colors.primary} />
             </View>
-            <Text variant="h3" fontWeight="medium" style={styles.title}>
-                No Orders Found ! 🥲
+            <Text variant="h4" fontWeight="medium" style={styles.title}>
+                No {status} Orders Found ! 🥲
             </Text>
-            <Text variant="caption" style={styles.subtitle}>
-                Looks like you haven't ordered anything yet 😞
-            </Text>
+            
         </View>
     )
 }
@@ -24,7 +22,7 @@ export default NoOrdersFound
 
 const styles = StyleSheet.create({
     container: {
-
+        marginTop: 30,
         justifyContent: 'center',
         alignItems: 'center',
 
@@ -41,6 +39,7 @@ const styles = StyleSheet.create({
     title: {
         marginBottom: 8,
         textAlign: 'center',
+        color:colors.gray600
     },
     subtitle: {
         textAlign: 'center',

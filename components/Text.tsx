@@ -26,7 +26,7 @@ const Text: React.FC<TextProps> = ({
 }) => {
   const getFontFamily = (): TextStyle => {
     let fontFamily = 'Poppins-Regular';
-    
+
     switch (fontWeight) {
       case 'medium':
         fontFamily = 'Poppins-Medium';
@@ -40,7 +40,7 @@ const Text: React.FC<TextProps> = ({
       default:
         fontFamily = 'Poppins-Regular';
     }
-    
+
     return {
       fontFamily,
       // Remove fontWeight as we're using specific font families
@@ -104,13 +104,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 20,
   },
+  
   button: {
     fontSize: 16,
     lineHeight: 24,
-    textTransform: 'uppercase',
+    // textTransform: 'uppercase',
     letterSpacing: 0.5,
 
-    color:colors.white
+    color: colors.white
   },
 });
 
