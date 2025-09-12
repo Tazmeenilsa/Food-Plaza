@@ -1,8 +1,8 @@
-import { addToCart, decrementQuantity } from '@/app/redux/Slices/CartSlice';
+import { addToCart, decrementQuantity, removeFromCart } from '@/app/redux/Slices/CartSlice';
 import { RootState } from '@/app/redux/store';
 import { colors } from '@/theme/colors';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React from 'react';
 import { Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Text from './Text';
@@ -13,21 +13,31 @@ export interface FoodItemProps {
     name: string;
     price: number;
     rating: number;
-    
+
     image: string;
     description: string;
 }
 
 const FoodItemCard: React.FC<FoodItemProps> = ({ id, name, price, image, description }) => {
-    const [quantity, setQuantity] = useState(0);
     const cartData = useSelector((state: RootState) => state.cart.cartItems)
-    console.log({ cartData })
     const dispatch = useDispatch()
     const handleAdd = () => {
-        dispatch(addToCart({ id: id.toString(), name, price, image, description }))
+        const item = {
+            id: id.toString(),
+            name,
+            price,
+            image,
+            description
+        }
+        dispatch(addToCart(item))
     };
     const handleRemove = () => {
-        dispatch(decrementQuantity({ id: id.toString() }))
+        const currentItem = cartData.find(item => item.id === id.toString());
+        if (currentItem && currentItem.quantity > 1) {
+            dispatch(decrementQuantity({ id: id.toString() }));
+        } else {
+            dispatch(removeFromCart({ id: id.toString() }));
+        }
     };
 
     return (

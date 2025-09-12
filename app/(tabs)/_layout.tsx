@@ -1,10 +1,8 @@
 import MyTabBar from '@/components/MyTabBar';
 import { Tabs } from 'expo-router';
 import React from 'react';
-import { useTheme } from '../../theme/ThemeContext';
 
 const TabLayout = () => {
-    const { colors } = useTheme();
 
     return (
         <Tabs

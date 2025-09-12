@@ -1,12 +1,15 @@
+import { RootState } from '@/app/redux/store';
 import { colors } from '@/theme/colors';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import { PlatformPressable } from '@react-navigation/elements';
 import { useLinkBuilder } from '@react-navigation/native';
 import React, { useEffect, useRef } from 'react';
-import { Animated, View } from 'react-native';
+import { Animated, StyleSheet, Text, View } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const MyTabBar = ({ state, descriptors, navigation }: any) => {
     const { buildHref } = useLinkBuilder();
+    const cartData = useSelector((state: RootState) => state.cart.cartItems)
 
     const getIconName = (routeName: string) => {
         switch (routeName) {
@@ -25,7 +28,7 @@ const MyTabBar = ({ state, descriptors, navigation }: any) => {
 
     return (
         <View style={{ flexDirection: 'row' }}>
-            {state.routes.map((route:any, index: any) => {
+            {state.routes.map((route: any, index: any) => {
                 const { options } = descriptors[route.key];
                 const label =
                     options.tabBarLabel !== undefined
@@ -99,16 +102,25 @@ const MyTabBar = ({ state, descriptors, navigation }: any) => {
                                         height: 60,
                                         backgroundColor: colors.secondary,
                                         borderRadius: 50,
-                                        
+
                                     }}
                                 />
                             )}
 
-                            <MaterialIcons
-                                name={getIconName(route.name)}
-                                size={28}
-                                color={isFocused ? colors.white : colors.divider}
-                            />
+                            <View>
+                                <MaterialIcons
+                                    name={getIconName(route.name) as any}
+                                    size={24}
+                                    color={isFocused ? colors.primary : colors.white}
+                                />
+                                {route.name === '(cart)/index' && cartData.length > 0 && (
+                                    <View style={styles.badge}>
+                                        <Text style={styles.badgeText}>
+                                            {cartData.length > 9 ? '9+' : cartData.length}
+                                        </Text>
+                                    </View>
+                                )}
+                            </View>
                         </Animated.View>
                     </PlatformPressable>
                 );
@@ -117,5 +129,23 @@ const MyTabBar = ({ state, descriptors, navigation }: any) => {
     );
 };
 
+const styles = StyleSheet.create({
+    badge: {
+        position: 'absolute',
+        right: -10,
+        top: -5,
+        backgroundColor: colors.info,
+        borderRadius: 10,
+        width: 20,
+        height: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    badgeText: {
+        color: colors.white,
+        fontSize: 10,
+        fontWeight: 'bold',
+    },
+});
 
-export default MyTabBar
+export default MyTabBar;

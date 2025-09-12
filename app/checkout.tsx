@@ -8,41 +8,27 @@ import { colors } from '@/theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from './redux/store';
 
-// Mock data - replace with your actual data
-const mockCartItems = [
-  {
-    id: '1',
-    name: 'Margherita Pizza',
-    price: 12.99,
-    quantity: 2,
-    image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=500&auto=format&fit=crop',
-  },
-  {
-    id: '2',
-    name: 'Caesar Salad',
-    price: 8.99,
-    quantity: 1,
-    image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500&auto=format&fit=crop',
-  },
-];
 
 const CheckoutScreen = () => {
   const navigation = useNavigation();
+  const cartData = useSelector((state: RootState) => state.cart.cartItems)
+
   const [selectedPayment, setSelectedPayment] = useState('card');
   const [isLoading, setIsLoading] = useState(false);
-  const [cartItems, setCartItems] = useState(mockCartItems);
   const [discount, setDiscount] = useState(0);
   const deliveryFee = 3.0;
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const subtotal = cartData.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   const total = subtotal + deliveryFee - discount;
 
 
 
   const handleApplyPromo = (code: string) => {
     // Simple promo code logic 
-    if (code.toLowerCase() === 'FOOD20') {
+    if (code.toLowerCase() === 'food20') {
       setDiscount(subtotal * 0.2); // 20% off
     } else if (code) {
       alert('Invalid promo code');
@@ -74,7 +60,7 @@ const CheckoutScreen = () => {
     <RootLayout commonHeader={true} title="Checkout" iconName="shoppingcart">
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <OrderSummary
-          items={cartItems}
+          items={cartData}
         />
 
         <DeliveryInfo

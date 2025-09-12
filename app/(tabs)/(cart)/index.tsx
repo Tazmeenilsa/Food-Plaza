@@ -1,11 +1,14 @@
+import { removeFromCart, updateQuantity } from '@/app/redux/Slices/CartSlice';
+import { RootState } from '@/app/redux/store';
 import CartItemCard from '@/components/CartItemCard';
 import EmptyCart from '@/components/EmptyCart';
 import RootLayout from '@/components/RootLayout';
 import Text from '@/components/Text';
 import { colors } from '@/theme/colors';
 import { Link } from 'expo-router';
-import React, { useState } from 'react';
+import React from 'react';
 import { FlatList, StyleSheet, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface CartItem {
   id: string;
@@ -16,48 +19,17 @@ interface CartItem {
 }
 
 const CartScreen = () => {
+  const cartData = useSelector((state: RootState) => state.cart.cartItems)
+  const dispatch = useDispatch()
 
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: '1',
-      name: 'Margherita Pizza',
-      price: 12.99,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?w=500&auto=format&fit=crop',
-    },
-    {
-      id: '2',
-      name: 'Chicken Burger',
-      price: 8.99,
-      quantity: 2,
-      image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop',
-    },
-    {
-      id: '3',
-      name: 'Caesar Salad',
-      price: 9.49,
-      quantity: 1,
-      image: 'https://images.unsplash.com/photo-1546793665-c74683f339c1?w=500&auto=format&fit=crop',
-    },
-  ]);
+  console.log({ cartData })
 
-  const updateQuantity = (id: string, newQuantity: number) => {
-    setCartItems(prevItems =>
-      prevItems.map(item =>
-        item.id === id ? { ...item, quantity: Math.max(1, newQuantity) } : item
-      )
-    );
-  };
-
-  const removeItem = (id: string) => {
-    setCartItems(prevItems => prevItems.filter(item => item.id !== id));
-  };
 
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+    return cartData.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
-  const isCartEmpty = cartItems.length === 0;
+  const isCartEmpty = cartData.length === 0;
 
   return (
     <RootLayout commonHeader={true} title={'Cart'} iconName={'shoppingcart'}>
@@ -67,8 +39,8 @@ const CartScreen = () => {
         ) : (
           <>
             {/* cart card */}
-            <FlatList
-              data={cartItems}
+            <FlatList 
+              data={cartData}
               keyExtractor={item => item.id}
               renderItem={({ item }) => (
                 <CartItemCard
@@ -77,9 +49,9 @@ const CartScreen = () => {
                   price={item.price}
                   quantity={item.quantity}
                   image={item.image}
-                  onIncrease={() => updateQuantity(item.id, item.quantity + 1)}
-                  onDecrease={() => updateQuantity(item.id, item.quantity - 1)}
-                  onRemove={() => removeItem(item.id)}
+                  onIncrease={() => dispatch(updateQuantity({id:item.id,quantity:item.quantity+1}))}
+                  onDecrease={() => dispatch(updateQuantity({id:item.id,quantity:item.quantity-1}))}
+                  onRemove={() => dispatch(removeFromCart(item))}
                 />
               )}
               contentContainerStyle={styles.cartList}
@@ -176,7 +148,7 @@ const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 16,
     fontWeight: '600',
-    textAlign:'center'
+    textAlign: 'center'
   },
 });
 

@@ -1,5 +1,6 @@
 import { colors } from '@/theme/colors';
 import { AntDesign } from '@expo/vector-icons';
+import { Link } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import Text from './Text';
@@ -16,6 +17,11 @@ const EmptyCart = () => {
       <Text variant="caption" style={styles.subtitle}>
         Looks like you haven't added anything to your cart yet
       </Text>
+
+      <Link href="/(tabs)/(home)" style={styles.button} >
+        <Text variant="button" fontWeight="normal">Continue Shopping</Text>
+      </Link>
+        
     </View>
   );
 };
@@ -44,6 +50,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     maxWidth: 300,
     color:colors.gray600
+  },
+  button: {
+    marginTop: 30,
+    padding: 12,
+    backgroundColor: colors.primary,
+    borderRadius: 8,
+    alignItems: 'center',
   },
 });
 

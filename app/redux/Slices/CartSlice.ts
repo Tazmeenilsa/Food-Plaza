@@ -22,7 +22,6 @@ export const CartSlice = createSlice({
             } else {
                 state.cartItems.push({ ...action.payload, quantity: 1 });
             }
-            console.log('cart items', state.cartItems);
         },
         decrementQuantity: (state, action) => {
             const item = state.cartItems.find((item) => item.id === action.payload.id)
